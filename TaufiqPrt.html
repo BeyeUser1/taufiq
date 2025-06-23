@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Modern</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+                max-height: 90vh;
+            }
+
+            .project-links {
+                flex-direction: column;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff0080;
+            --accent-color: #00ff88;
+            --dark-bg: #0a0a0f;
+            --card-bg: #1a1a2e;
+            --text-light: #ffffff;
+            --text-gray: #a0a8b8;
+            --neon-glow: 0 0 20px;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #0a0a0f, #1a1a2e, #16213e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+        .particle:nth-child(3) { top: 80%; left: 30%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideUp 1s ease-out;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            animation: slideUp 1s ease-out 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            animation: slideUp 1s ease-out 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow) rgba(0, 212, 255, 0.6);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+
+        .about-image:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--neon-glow) rgba(0, 212, 255, 0.4);
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
+        .skill-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            border-radius: 15px;
+        }
+
+        .skill-card:hover::after {
+            opacity: 0.1;
+        }
+
+        .skill-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--neon-glow) rgba(255, 0, 128, 0.3);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .project-content p {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+        }
+
+        .project-link {
+            display: inline-block;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid #374151;
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .submit-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--neon-glow) rgba(0, 255, 136, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-gray);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            margin: 2rem;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: var(--neon-glow) rgba(0, 212, 255, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            color: var(--text-gray);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 0, 128, 0.1);
+        }
+
+        .close:hover {
+            color: var(--secondary-color);
+            background: rgba(255, 0, 128, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .modal-title {
+            color: var(--text-light);
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .modal-body h4 {
+            color: var(--primary-color);
+            margin: 1.5rem 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .modal-body p, .modal-body li {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body ul {
+            padding-left: 1.5rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tech-tag {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .project-status {
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            margin-top: 1rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .project-btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .project-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--neon-glow) rgba(0, 212, 255, 0.4);
+        }
+
+        .project-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .project-btn.secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Portofolio</div>
+            <ul class="nav-links">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#skills">Keahlian</a></li>
+                <li><a href="#projects">Proyek</a></li>
+                <li><a href="#contact">Kontak</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Halo, Saya Taufiq Hidayat</h1>
+            <p>IT Specialist & Developer yang passionate dalam menciptakan solusi teknologi inovatif dan menakjubkan</p>
+            <a href="#projects" class="cta-button">Lihat Proyek Saya</a>
+        </div>
+    </section>
+
+    <section id="about" class="fade-in">
+        <h2 class="section-title">Tentang Saya</h2>
+        <div class="about-content">
+            <div class="about-image">
+                👨‍💻
+            </div>
+            <div class="about-text">
+                <p>Saya adalah seorang IT Specialist yang berpengalaman dalam berbagai bidang teknologi informasi. Dengan expertise dalam sistem administrasi, networking, programming, dan cybersecurity, saya selalu siap menghadapi tantangan teknologi terdepan.</p>
+                <p>Perjalanan saya di dunia IT dimulai dari ketertarikan mendalam pada teknologi. Kini saya telah mengembangkan keahlian dalam cloud computing, database management, dan system integration. Saya percaya bahwa teknologi adalah kunci untuk menciptakan masa depan yang lebih baik.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="fade-in">
+        <h2 class="section-title">Keahlian</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">🔧</div>
+                <h3>System Administration</h3>
+                <p>Mengelola dan memelihara infrastruktur IT, server management, dan troubleshooting sistem</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">🌐</div>
+                <h3>Network & Security</h3>
+                <p>Konfigurasi jaringan, firewall setup, cybersecurity, dan monitoring sistem keamanan IT</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">☁️</div>
+                <h3>Cloud Computing</h3>
+                <p>Deployment dan management cloud services (AWS, Azure, GCP) serta containerization</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">🗄️</div>
+                <h3>Database Management</h3>
+                <p>Design, optimization, dan maintenance database (MySQL, PostgreSQL, MongoDB)</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">💻</div>
+                <h3>Programming</h3>
+                <p>Pengembangan aplikasi dengan Python, JavaScript, PHP, dan berbagai framework modern</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">📊</div>
+                <h3>Data Analytics</h3>
+                <p>Analisis data, reporting, dan visualisasi menggunakan tools modern seperti Power BI</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="fade-in">
+        <h2 class="section-title">Proyek Terbaru</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">🏢</div>
+                <div class="project-content">
+                    <h3>Enterprise IT Infrastructure</h3>
+                    <p>Implementasi dan maintenance infrastruktur IT perusahaan dengan high availability dan security</p>
+                    <a href="#" class="project-link" data-project="infrastructure">Lihat Detail →</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🔒</div>
+                <div class="project-content">
+                    <h3>Cybersecurity System</h3>
+                    <p>Implementasi sistem keamanan komprehensif dengan monitoring real-time dan threat detection</p>
+                    <a href="#" class="project-link" data-project="cybersecurity">Lihat Detail →</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">☁️</div>
+                <div class="project-content">
+                    <h3>Cloud Migration Project</h3>
+                    <p>Migrasi sistem on-premise ke cloud dengan optimasi performa dan cost efficiency</p>
+                    <a href="#" class="project-link" data-project="cloud">Lihat Detail →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="fade-in">
+        <h2 class="section-title">Hubungi Saya</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div>
+                        <h4>Email</h4>
+                        <p>th231016@gmail.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <div>
+                        <h4>Telepon</h4>
+                        <p>+62 822 3395 0631</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🏢</div>
+                    <div>
+                        <h4>Perguruan Tinggi</h4>
+                        <p>Universitas Metamedia</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <h4>Lokasi</h4>
+                        <p>Padang, Indonesia</p>
+                    </div>
+                </div>
+            </div>
+            <form class="contact-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Nama Lengkap" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Subjek" required>
+                </div>
+                <div class="form-group">
+                    <textarea rows="5" placeholder="Pesan Anda" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Kirim Pesan</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Taufiq Hidayat, Terimakasih dan Salam Hangat.</p>
+    </footer>
+
+    <!-- Project Modals -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <div class="modal-icon" id="modalIcon">🏢</div>
+                <h2 class="modal-title" id="modalTitle">Project Title</h2>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Form submission
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Terima kasih! Pesan Anda telah terkirim.');
+            this.reset();
+        });
+
+        // Add some interactive particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.position = 'fixed';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 5000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 2000);
+
+        // Project Modal Functionality
+        const modal = document.getElementById('projectModal');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const closeBtn = document.querySelector('.close');
+
+        // Project data
+        const projectData = {
+            infrastructure: {
+                icon: '🏢',
+                title: 'Enterprise IT Infrastructure',
+                description: 'Proyek implementasi infrastruktur IT perusahaan skala enterprise dengan fokus pada high availability, scalability, dan security.',
+                details: {
+                    'Tantangan': 'Perusahaan membutuhkan infrastruktur IT yang dapat mendukung 500+ pengguna dengan uptime 99.9% dan keamanan tingkat enterprise.',
+                    'Solusi': [
+                        'Implementasi server cluster dengan load balancing',
+                        'Setup disaster recovery dan backup system',
+                        'Konfigurasi network segmentation untuk security',
+                        'Implementasi monitoring dan alerting system'
+                    ],
+                    'Teknologi': ['VMware vSphere', 'Cisco Networking', 'Windows Server', 'Linux', 'Zabbix', 'Veeam Backup'],
+                    'Hasil': 'Berhasil meningkatkan uptime dari 95% menjadi 99.8%, mengurangi downtime sebesar 80%, dan meningkatkan security posture perusahaan.'
+                },
+                status: 'Completed - 2024',
+                duration: '6 bulan'
+            },
+            cybersecurity: {
+                icon: '🔒',
+                title: 'Cybersecurity System',
+                description: 'Implementasi sistem keamanan cyber yang komprehensif dengan real-time monitoring dan advanced threat detection.',
+                details: {
+                    'Tantangan': 'Perusahaan mengalami peningkatan ancaman cyber dan membutuhkan sistem keamanan proaktif untuk melindungi data sensitif.',
+                    'Solusi': [
+                        'Deploy Next-Generation Firewall (NGFW)',
+                        'Implementasi SIEM (Security Information and Event Management)',
+                        'Setup endpoint detection and response (EDR)',
+                        'Konfigurasi intrusion detection system (IDS/IPS)'
+                    ],
+                    'Teknologi': ['Fortinet FortiGate', 'Splunk SIEM', 'CrowdStrike Falcon', 'Nessus Vulnerability Scanner', 'Wireshark'],
+                    'Hasil': 'Mengurangi security incidents sebesar 90%, meningkatkan detection time dari 24 jam menjadi 5 menit, dan berhasil mencegah 15+ serangan berbahaya.'
+                },
+                status: 'Completed - 2024',
+                duration: '4 bulan'
+            },
+            cloud: {
+                icon: '☁️',
+                title: 'Cloud Migration Project',
+                description: 'Migrasi infrastruktur on-premise ke cloud dengan optimasi performa dan efisiensi biaya.',
+                details: {
+                    'Tantangan': 'Migrasi 50+ server dan aplikasi dari data center on-premise ke cloud dengan minimal downtime dan tanpa kehilangan data.',
+                    'Solusi': [
+                        'Assessment dan planning migrasi menggunakan AWS Migration Hub',
+                        'Implementasi hybrid cloud untuk fase transisi',
+                        'Re-architecting aplikasi untuk cloud-native',
+                        'Setup automated backup dan disaster recovery di cloud'
+                    ],
+                    'Teknologi': ['AWS EC2', 'RDS', 'S3', 'CloudFormation', 'Lambda', 'CloudWatch', 'Terraform'],
+                    'Hasil': 'Berhasil mengurangi operational cost sebesar 40%, meningkatkan scalability, dan mencapai 99.95% availability dengan zero data loss.'
+                },
+                status: 'Completed - 2024',
+                duration: '8 bulan'
+            }
+        };
+
+        // Open modal
+        document.querySelectorAll('.project-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const projectKey = this.getAttribute('data-project');
+                const project = projectData[projectKey];
+                
+                if (project) {
+                    modalIcon.textContent = project.icon;
+                    modalTitle.textContent = project.title;
+                    
+                    let bodyContent = `
+                        <p><strong>${project.description}</strong></p>
+                        <div class="project-status">${project.status}</div>
+                        <p><strong>Duration:</strong> ${project.duration}</p>
+                    `;
+                    
+                    Object.keys(project.details).forEach(key => {
+                        if (key === 'Teknologi') {
+                            bodyContent += `<h4>${key}:</h4>`;
+                            bodyContent += '<div class="tech-stack">';
+                            project.details[key].forEach(tech => {
+                                bodyContent += `<span class="tech-tag">${tech}</span>`;
+                            });
+                            bodyContent += '</div>';
+                        } else if (Array.isArray(project.details[key])) {
+                            bodyContent += `<h4>${key}:</h4><ul>`;
+                            project.details[key].forEach(item => {
+                                bodyContent += `<li>${item}</li>`;
+                            });
+                            bodyContent += '</ul>';
+                        } else {
+                            bodyContent += `<h4>${key}:</h4><p>${project.details[key]}</p>`;
+                        }
+                    });
+                    
+                    bodyContent += `
+                        <div class="project-links">
+                            <button class="project-btn" onclick="contactForProject()">Diskusi Proyek Serupa</button>
+                            <button class="project-btn secondary" onclick="downloadCaseStudy('${projectKey}')">Download Case Study</button>
+                        </div>
+                    `;
+                    
+                    modalBody.innerHTML = bodyContent;
+                    modal.classList.add('show');
+                }
+            });
+        });
+
+        // Close modal
+        closeBtn.addEventListener('click', function() {
+            modal.classList.remove('show');
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+
+        // Project actions
+        function contactForProject() {
+            document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' });
+            modal.classList.remove('show');
+        }
+
+        function downloadCaseStudy(projectKey) {
+            alert(`Case study untuk ${projectData[projectKey].title} akan segera tersedia untuk download!`);
+        }
+    </script>
+</body>
+</html>
